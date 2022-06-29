@@ -8,7 +8,6 @@ import '../widgets/form_widgets/password_input_field.dart';
 import 'fake_dashboard_screen.dart';
 import 'forget_password_screen.dart';
 import 'signup_options_screen.dart';
-import 'signup_screen.dart';
 
 class SignInScreenScreen extends StatefulWidget {
   const SignInScreenScreen({Key? key}) : super(key: key);
@@ -65,6 +64,7 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                       // Email Field
                       const SizedBox(height: 6),
                       EmailInputField(
+                        isDisable: true,
                         hintText: 'Enter Email',
                         errorText: 'This is error Message',
                         titleText: 'Email',
@@ -82,7 +82,7 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                       // Enter Password Field
                       PasswordInputField(
                         hintText: 'Enter your password',
-                        errorText: 'Passwords don’t match.',
+                        errorText: 'Please enter the correct password.',
                         titleText: 'Enter Password*',
                         isError: isPasswordError,
                         needPasswordInstruction: false,
@@ -179,7 +179,7 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       // Go to Sign in Screen Text Button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

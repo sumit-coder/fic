@@ -4,6 +4,7 @@ import '../../constants/ui_constants.dart';
 import '../animations/bear_animation_widget.dart';
 import '../widgets/form_widgets/email_input_field.dart';
 import '../widgets/form_widgets/form_submit_button.dart';
+import 'otp_verification_screen.dart';
 import 'reset_password_screen.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
@@ -71,7 +72,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ResetPasswordScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => const OtpVerificationScreen()),
                             );
                           },
                           buttonTitle: 'Continue',

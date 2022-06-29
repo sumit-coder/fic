@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'views/screens/fake_dashboard_screen.dart';
 import 'views/screens/forget_password_screen.dart';
+import 'views/screens/otp_verification_screen.dart';
 import 'views/screens/reset_password_screen.dart';
 import 'views/screens/signin_screen.dart';
 import 'views/screens/signup_options_screen.dart';

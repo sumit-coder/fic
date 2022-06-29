@@ -1,6 +1,9 @@
 import 'package:fic/constants/ui_constants.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/buttons/email_sign_in_button.dart';
+import '../widgets/buttons/facebook_sign_in_button.dart';
+import '../widgets/buttons/google_sign_in_button.dart';
 import 'signin_screen.dart';
 import 'signup_screen.dart';
 
@@ -65,6 +68,7 @@ class SignUpOptionsScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 32),
+              // Already have an account and sign in button
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -103,141 +107,6 @@ class SignUpOptionsScreen extends StatelessWidget {
                 ],
               ),
               // const SizedBox(height: 92),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FacebookSignUpButton extends StatelessWidget {
-  const FacebookSignUpButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      color: facebookSignUpButtonColor,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Container(
-          height: 44,
-          width: 296,
-          padding: const EdgeInsets.only(left: 14, right: 14),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/facebook_icon.png',
-                scale: 28,
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                'Continue with Facebook',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GoogleSignUpButton extends StatelessWidget {
-  const GoogleSignUpButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Container(
-          height: 44,
-          width: 296,
-          padding: const EdgeInsets.only(left: 14, right: 14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: 1,
-              color: googleSignUpButtonBorderColor,
-            ),
-          ),
-          child: Row(
-            children: const [
-              Icon(
-                Icons.golf_course,
-                color: Colors.green,
-                size: 20,
-              ),
-              SizedBox(width: 8),
-              Text(
-                'Continue with Google',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: nonActiveTextColor,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SignUpWithEmailButton extends StatelessWidget {
-  const SignUpWithEmailButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: emailSignUpButtonColor,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Container(
-          height: 44,
-          width: 296,
-          padding: const EdgeInsets.only(left: 14, right: 14),
-          decoration: BoxDecoration(),
-          child: Row(
-            children: const [
-              Icon(
-                Icons.email_outlined,
-                color: Colors.white,
-                size: 20,
-              ),
-              SizedBox(width: 8),
-              Text(
-                'Sign up with Email',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              )
             ],
           ),
         ),

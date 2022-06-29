@@ -10,6 +10,7 @@ class EmailInputField extends StatefulWidget {
     required this.errorText,
     required this.onValueChange,
     required this.titleText,
+    this.isDisable,
   }) : super(key: key);
 
   final String hintText;
@@ -17,6 +18,7 @@ class EmailInputField extends StatefulWidget {
   final bool isError;
   final String errorText;
   final Function onValueChange;
+  final bool? isDisable;
 
   @override
   State<EmailInputField> createState() => _EmailInputFieldState();
@@ -44,15 +46,16 @@ class _EmailInputFieldState extends State<EmailInputField> {
           padding: const EdgeInsets.only(left: 10),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: widget.isDisable == null ? Color.fromARGB(20, 0, 0, 0) : Colors.white,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               width: 1,
-              color: widget.isError == true ? errorTextColor : Colors.white,
+              color: widget.isError == true ? errorTextColor : Color.fromARGB(0, 255, 255, 255),
             ),
           ),
           child: TextFormField(
             showCursor: true,
+            enabled: widget.isDisable,
             initialValue: '',
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.emailAddress,
