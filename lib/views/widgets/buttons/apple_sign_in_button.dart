@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/ui_constants.dart';
 
-class FacebookSignUpButton extends StatelessWidget {
-  const FacebookSignUpButton({
+class AppleSignInButton extends StatelessWidget {
+  const AppleSignInButton({
     Key? key,
     required this.onTap,
   }) : super(key: key);
@@ -28,7 +28,7 @@ class FacebookSignUpButton extends StatelessWidget {
               height: 36,
               width: 36,
               child: Image.asset(
-                'assets/images/facebook_icon.png',
+                'assets/images/apple_icon.png',
               ),
             ),
           ),

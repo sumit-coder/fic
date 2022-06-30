@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/ui_constants.dart';
+import '../../../enums/enums.dart';
 
 /// `PasswordInputField` is Used Only for Password
 class PasswordInputField extends StatefulWidget {
@@ -17,7 +18,7 @@ class PasswordInputField extends StatefulWidget {
   final String hintText;
   final String errorText;
   final String titleText;
-  final bool isError;
+  final TypeOfPasswordError isError;
   final Function onValueChange;
   final bool needPasswordInstruction;
 
@@ -26,6 +27,8 @@ class PasswordInputField extends StatefulWidget {
 }
 
 class _PasswordInputFieldState extends State<PasswordInputField> {
+  bool isObscureText = true;
+
   RegExp minCharactersRegEx = RegExp(r'^.{8,}');
   RegExp uppercaseCharactersRegEx = RegExp(r'^(?=.*?[A-Z])');
   RegExp lowercaseCharactersRegEx = RegExp(r'^(?=.*?[a-z])');
@@ -35,8 +38,6 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
   //     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$'); // for special (?=.*?[!@#\$&*~])
 
   bool isPasswordHasAError = false;
-  bool isObscureText = true;
-
   bool isPasswordHasMinCharacters = false;
   bool isPasswordHasUppercaseCharacters = false;
   bool isPasswordHasLowercaseCharacters = false;
@@ -116,13 +117,8 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
-              width: 1,
-              color: widget.needPasswordInstruction == true
-                  ? isPasswordHasAError
-                      ? errorTextColor
-                      : Colors.white
-                  : Colors.white,
-            ),
+                width: 1,
+                color: widget.isError != TypeOfPasswordError.none ? errorTextColor : Colors.white),
           ),
           child: TextFormField(
             showCursor: true,
@@ -163,20 +159,11 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           ),
         ),
         // error Message
-        widget.isError == true
-            ? Column(
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.errorText,
-                    style: const TextStyle(
-                      color: errorTextColor,
-                    ),
-                  )
-                ],
-              )
-            : const SizedBox(),
-        // Password Instruction's
+        ErrorWidget(
+          typeOfError: widget.isError,
+        ),
+
+        // if Needed for SignUP Password Instruction's
         widget.needPasswordInstruction == true
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,5 +211,57 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             : const SizedBox(),
       ],
     );
+  }
+}
+
+class ErrorWidget extends StatelessWidget {
+  const ErrorWidget({
+    Key? key,
+    required this.typeOfError,
+  }) : super(key: key);
+
+  final TypeOfPasswordError typeOfError;
+
+  @override
+  Widget build(BuildContext context) {
+    if (typeOfError == TypeOfPasswordError.wrongPassword) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please enter valid credentials',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else if (typeOfError == TypeOfPasswordError.inValidPassword) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please enter valid Password',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else if (typeOfError == TypeOfPasswordError.passwordFieldIsEmpty) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please Fill Password Field',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/ui_constants.dart';
-import '../widgets/form_widgets/form_submit_button.dart';
-import '../widgets/form_widgets/otp_text_field.dart';
-import 'reset_password_screen.dart';
+import '../../../constants/ui_constants.dart';
+import '../../../enums/enums.dart';
+import '../../widgets/form_widgets/form_submit_button.dart';
+import '../../widgets/form_widgets/otp_text_field.dart';
+import 'setup_password_screen.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({Key? key}) : super(key: key);
@@ -144,7 +145,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const ResetPasswordScreen(),
+                                      builder: (context) => const PasswordSetUpScreen(),
                                     ),
                                   );
                                 }

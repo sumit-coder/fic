@@ -1,51 +1,70 @@
-import 'package:fic/views/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/ui_constants.dart';
+import '../../enums/enums.dart';
+import '../animations/bear_animation_widget.dart';
+import '../widgets/buttons/social_sign_in_buttons.dart';
 import '../widgets/form_widgets/email_input_field.dart';
 import '../widgets/form_widgets/form_submit_button.dart';
 import '../widgets/form_widgets/password_input_field.dart';
+import 'fake_dashboard_screen.dart';
+import 'forget_password_screen.dart';
+import 'multi_use_screens/otp_verification_screen.dart';
+import 'multi_use_screens/setup_password_screen.dart';
+import 'signin_screen.dart';
 
-class SingUpScreenScreen extends StatelessWidget {
-  const SingUpScreenScreen({Key? key}) : super(key: key);
+class SignUpScreenScreen extends StatefulWidget {
+  const SignUpScreenScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreenScreen> createState() => _SignUpScreenScreenState();
+}
+
+class _SignUpScreenScreenState extends State<SignUpScreenScreen> {
+  String typedEmail = '';
+
+  bool isEmailError = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 28, right: 28),
-                  margin: const EdgeInsets.only(left: 28, right: 28),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Sign up',
-                        style: TextStyle(
-                          fontSize: 36,
-                          color: Color(0xFF21005D),
-                        ),
-                      ),
-                      Text(
-                        'Sign up to dig depper in your roots!',
-                        style: TextStyle(color: Color(0xFF79747E)),
-                      ),
-                    ],
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Sign up',
+                    style: TextStyle(
+                      fontSize: 36,
+                      color: Color(0xFF21005D),
+                    ),
                   ),
                 ),
-
+                const SizedBox(height: 8),
+                // send to other scrren if Don't have an account? or allready have an account?
+                SendToOtherScreenWithInfoText(
+                  firstInfoText: "Already have an account?",
+                  textButtonText: 'Sign in',
+                  onTapTextButton: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignInScreenScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const BearAnimationWidget(),
                 // Sign Up Form Card
                 Container(
                   padding: const EdgeInsets.all(28),
-                  margin: const EdgeInsets.all(28),
+                  margin: const EdgeInsets.only(left: 28, right: 28),
                   constraints: const BoxConstraints(maxWidth: 352),
                   decoration: BoxDecoration(
                     color: inputFormBackgroudColor,
@@ -55,84 +74,101 @@ class SingUpScreenScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Email Field
-
                       EmailInputField(
+                        isDisable: true,
                         hintText: 'parent@gmail.com',
                         errorText: 'This is error Message',
-                        titleText: 'Parent Email',
-                        isError: false,
-                        onValueChange: (typedValue) {},
-                      ),
-                      // Password Field
-                      const SizedBox(height: 20),
-                      PasswordInputField(
-                        hintText: 'Enter your password',
-                        errorText: 'Passwords don’t match.',
-                        titleText: 'Create Password',
-                        isError: false,
-                        needPasswordInstruction: true,
-                        onValueChange: (typedValue) {},
+                        titleText: 'Parent Email*',
+                        isError: TypeOfEmailError.none,
+                        onValueChange: (typedValue) {
+                          setState(() {
+                            isEmailError = false;
+                            typedEmail = typedValue;
+                          });
+                        },
                       ),
 
-                      // Re-enter Password Field
-                      const SizedBox(height: 20),
-                      PasswordInputField(
-                        hintText: 'Enter your password',
-                        errorText: 'Passwords don’t match.',
-                        titleText: 'Re-enter Password*',
-                        isError: false,
-                        needPasswordInstruction: false,
-                        onValueChange: (typedValue) {},
-                      ),
                       const SizedBox(height: 24),
-                      // Sign Up Button
+                      // submit button and forgot password button
                       Align(
                         alignment: Alignment.topCenter,
                         child: FormSubmitButton(
-                          onTap: () {},
-                          buttonTitle: 'Sign Up',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OtpVerificationScreen(),
+                              ),
+                            );
+                          },
+                          buttonTitle: 'Continue',
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      // Go to Sign in Screen Text Button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Already have an account?',
-                            style: TextStyle(
-                              color: Color(0xFF79747E),
-                            ),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(65, 20),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => SignInScreenScreen()),
-                              );
-                            },
-                            child: const Text(
-                              'Sign in ->',
-                              style: TextStyle(
-                                color: textFocusColor,
-                              ),
-                            ),
-                          )
-                        ],
-                      )
                     ],
                   ),
-                )
+                ),
+                SocialSignInButtons(
+                  onTapGoogleButton: () {},
+                  onTapAppleButton: () {},
+                  onTapFacebookButton: () {},
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class SendToOtherScreenWithInfoText extends StatelessWidget {
+  const SendToOtherScreenWithInfoText({
+    Key? key,
+    required this.onTapTextButton,
+    required this.firstInfoText,
+    required this.textButtonText,
+  }) : super(key: key);
+
+  final VoidCallback onTapTextButton;
+  final String firstInfoText;
+  final String textButtonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          firstInfoText,
+          style: const TextStyle(
+            color: nonActiveTextColor,
+          ),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(70, 20),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          onPressed: onTapTextButton,
+          child: Row(
+            children: [
+              Text(
+                textButtonText,
+                style: const TextStyle(
+                  color: textFocusColor,
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward,
+                size: 14,
+                color: textFocusColor,
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

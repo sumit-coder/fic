@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:fic/constants/ui_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum TypeOfOtpError { emptyOtp, wrongOtp, none }
+import '../../../enums/enums.dart';
 
 class OtpTextFields extends StatefulWidget {
   const OtpTextFields({

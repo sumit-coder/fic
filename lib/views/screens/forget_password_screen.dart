@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/ui_constants.dart';
+import '../../enums/enums.dart';
 import '../animations/bear_animation_widget.dart';
 import '../widgets/form_widgets/email_input_field.dart';
 import '../widgets/form_widgets/form_submit_button.dart';
-import 'otp_verification_screen.dart';
-import 'reset_password_screen.dart';
+import 'multi_use_screens/otp_verification_screen.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -60,7 +60,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                         hintText: 'Email',
                         errorText: 'This is error Message',
                         titleText: 'Parent Email*',
-                        isError: false,
+                        isError: TypeOfEmailError.none,
                         onValueChange: (typedValue) {},
                       ),
 

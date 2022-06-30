@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/ui_constants.dart';
+import '../../enums/enums.dart';
 import '../animations/bear_animation_widget.dart';
+import '../widgets/buttons/social_sign_in_buttons.dart';
 import '../widgets/form_widgets/email_input_field.dart';
 import '../widgets/form_widgets/form_submit_button.dart';
 import '../widgets/form_widgets/password_input_field.dart';
 import 'fake_dashboard_screen.dart';
 import 'forget_password_screen.dart';
-import 'signup_options_screen.dart';
+import 'multi_use_screens/setup_password_screen.dart';
+import 'signup_screen.dart';
 
 class SignInScreenScreen extends StatefulWidget {
   const SignInScreenScreen({Key? key}) : super(key: key);
@@ -24,8 +27,63 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
   String typedPassword = '';
   bool isRememberMe = false;
 
-  bool isEmailError = false;
-  bool isPasswordError = false;
+  TypeOfEmailError emailError = TypeOfEmailError.none;
+
+  TypeOfPasswordError passwordError = TypeOfPasswordError.none;
+
+  onPressedSignButton() {
+    // if Email and Password is NOT EMPTY
+    if (typedEmail != '' && typedPassword != '') {
+      // if Email and Password Right
+      if (typedEmail == rightEmail && typedPassword == rightPassword) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FakeDashboardScreen(),
+          ),
+        );
+      } else {
+        // if Email and Password Not Right
+        if (typedEmail != rightEmail) {
+          setState(() {
+            setState(() {
+              emailError = TypeOfEmailError.wrongEmail;
+            });
+          });
+        }
+        if (typedPassword != rightPassword) {
+          setState(() {
+            passwordError = TypeOfPasswordError.wrongPassword;
+          });
+        }
+      }
+    }
+    // Email and Password is Empty
+    if (typedEmail == '' && typedPassword == '') {
+      setState(() {
+        emailError = TypeOfEmailError.emailFieldIsEmpty;
+        passwordError = TypeOfPasswordError.passwordFieldIsEmpty;
+      });
+
+      return;
+    }
+    // Email is Empty
+    if (typedEmail == '') {
+      setState(() {
+        emailError = TypeOfEmailError.emailFieldIsEmpty;
+      });
+
+      return;
+    }
+    // Password is Empty
+    if (typedPassword == '') {
+      setState(() {
+        passwordError = TypeOfPasswordError.passwordFieldIsEmpty;
+      });
+
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +106,19 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                     ),
                   ),
                 ),
+                // send to other scrren if Don't have an account? or allready have an account?
+                SendToOtherScreenWithInfoText(
+                  firstInfoText: "Don't have an account? ",
+                  textButtonText: 'Sign up',
+                  onTapTextButton: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreenScreen(),
+                      ),
+                    );
+                  },
+                ),
                 const BearAnimationWidget(),
                 // Sign Up Form Card
                 Container(
@@ -62,134 +133,66 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Email Field
-                      const SizedBox(height: 6),
                       EmailInputField(
                         isDisable: true,
-                        hintText: 'Enter Email',
+                        hintText: 'Email',
                         errorText: 'This is error Message',
                         titleText: 'Email',
-                        isError: isEmailError,
+                        isError: emailError,
                         onValueChange: (typedValue) {
                           setState(() {
-                            isEmailError = false;
                             typedEmail = typedValue;
                           });
                         },
                       ),
                       // Password Field
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Enter Password Field
                       PasswordInputField(
-                        hintText: 'Enter your password',
+                        hintText: 'Password',
                         errorText: 'Please enter the correct password.',
                         titleText: 'Enter Password*',
-                        isError: isPasswordError,
+                        isError: passwordError,
                         needPasswordInstruction: false,
                         onValueChange: (typedValue) {
                           setState(() {
-                            isPasswordError = false;
                             typedPassword = typedValue;
                           });
                         },
                       ),
 
                       const SizedBox(height: 16),
+                      // Remember and forgot passoword TEXT BUTTONS
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            height: 18,
-                            width: 18,
-                            child: Checkbox(
-                              value: isRememberMe,
-                              checkColor: Colors.white,
-                              activeColor: nonActiveTextColor,
-                              onChanged: (value) {
-                                setState(() {
-                                  isRememberMe = !isRememberMe;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Remember me',
-                            style: TextStyle(
-                              color: nonActiveTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // submit button and forgot password button
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Column(
-                          children: [
-                            // Sign Up Button
-                            FormSubmitButton(
-                              onTap: () {
-                                if (typedEmail != '' && typedPassword != '') {
-                                  if (typedEmail == rightEmail && typedPassword == rightPassword) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const FakeDashboardScreen(),
-                                      ),
-                                    );
-                                  } else {
-                                    if (typedEmail != rightEmail) {
-                                      setState(() {
-                                        isEmailError = true;
-                                      });
-                                    }
-                                    if (typedPassword != rightPassword) {
-                                      setState(() {
-                                        isPasswordError = true;
-                                      });
-                                    }
-                                  }
-                                }
-                              },
-                              buttonTitle: 'Sign In',
-                            ),
-                            const SizedBox(height: 16),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(70, 20),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const ForgetPasswordScreen()),
-                                );
-                              },
-                              child: const Text(
-                                'Forgot password?',
-                                style: TextStyle(
-                                  color: textFocusColor,
+                          Row(
+                            children: [
+                              SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: Checkbox(
+                                  value: isRememberMe,
+                                  checkColor: Colors.white,
+                                  activeColor: nonActiveTextColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isRememberMe = !isRememberMe;
+                                    });
+                                  },
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      // Go to Sign in Screen Text Button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don't have an account? ",
-                            style: TextStyle(
-                              color: nonActiveTextColor,
-                            ),
+                              const SizedBox(width: 10),
+                              const Text(
+                                'Remember me',
+                                style: TextStyle(
+                                  color: nonActiveTextColor,
+                                ),
+                              ),
+                            ],
                           ),
+                          // Forgot Password Button
                           TextButton(
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -200,30 +203,37 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const SignUpOptionsScreen(),
-                                ),
+                                    builder: (context) => const ForgetPasswordScreen()),
                               );
                             },
-                            child: Row(
-                              children: const [
-                                Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    color: textFocusColor,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  size: 14,
-                                  color: textFocusColor,
-                                )
-                              ],
+                            child: const Text(
+                              'Forgot password',
+                              style: TextStyle(
+                                color: nonActiveTextColor,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           )
                         ],
-                      )
+                      ),
+                      const SizedBox(height: 24),
+                      // submit button and forgot password button
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: FormSubmitButton(
+                          onTap: () {
+                            onPressedSignButton();
+                          },
+                          buttonTitle: 'Sign In',
+                        ),
+                      ),
                     ],
                   ),
+                ),
+                SocialSignInButtons(
+                  onTapGoogleButton: () {},
+                  onTapAppleButton: () {},
+                  onTapFacebookButton: () {},
                 ),
                 const SizedBox(height: 20),
               ],
@@ -231,6 +241,57 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SendToOtherScreenWithInfoText extends StatelessWidget {
+  const SendToOtherScreenWithInfoText({
+    Key? key,
+    required this.onTapTextButton,
+    required this.firstInfoText,
+    required this.textButtonText,
+  }) : super(key: key);
+
+  final VoidCallback onTapTextButton;
+  final String firstInfoText;
+  final String textButtonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          firstInfoText,
+          style: const TextStyle(
+            color: nonActiveTextColor,
+          ),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(70, 20),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          onPressed: onTapTextButton,
+          child: Row(
+            children: [
+              Text(
+                textButtonText,
+                style: const TextStyle(
+                  color: textFocusColor,
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward,
+                size: 14,
+                color: textFocusColor,
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

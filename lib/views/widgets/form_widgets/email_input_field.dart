@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../constants/ui_constants.dart';
+import '../../../enums/enums.dart';
 
 class EmailInputField extends StatefulWidget {
   const EmailInputField({
@@ -15,7 +18,7 @@ class EmailInputField extends StatefulWidget {
 
   final String hintText;
   final String titleText;
-  final bool isError;
+  final TypeOfEmailError isError;
   final String errorText;
   final Function onValueChange;
   final bool? isDisable;
@@ -50,7 +53,9 @@ class _EmailInputFieldState extends State<EmailInputField> {
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               width: 1,
-              color: widget.isError == true ? errorTextColor : Color.fromARGB(0, 255, 255, 255),
+              color: widget.isError != TypeOfEmailError.none
+                  ? errorTextColor
+                  : Color.fromARGB(0, 255, 255, 255),
             ),
           ),
           child: TextFormField(
@@ -60,7 +65,7 @@ class _EmailInputFieldState extends State<EmailInputField> {
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              suffixIcon: widget.isError == true
+              suffixIcon: widget.isError != TypeOfEmailError.none
                   ? const Icon(
                       Icons.error_outline_rounded,
                       color: errorTextColor,
@@ -78,26 +83,69 @@ class _EmailInputFieldState extends State<EmailInputField> {
               ),
             ),
             onChanged: (value) {
-              // isEmailValid = false;
+              if (isValidateEmail.hasMatch(value)) {}
               widget.onValueChange(value);
+              // isEmailValid = false;
             },
           ),
         ),
-        // error Message
-        widget.isError == true
-            ? Column(
-                children: const [
-                  SizedBox(height: 10),
-                  Text(
-                    'This email is not registered with us. Please check and re-enter your email.',
-                    style: TextStyle(
-                      color: errorTextColor,
-                    ),
-                  )
-                ],
-              )
-            : const SizedBox(),
+        // Error Widget
+        ErrorWidget(
+          typeOfError: widget.isError,
+        )
       ],
     );
+  }
+}
+
+class ErrorWidget extends StatelessWidget {
+  const ErrorWidget({
+    Key? key,
+    required this.typeOfError,
+  }) : super(key: key);
+
+  final TypeOfEmailError typeOfError;
+
+  @override
+  Widget build(BuildContext context) {
+    if (typeOfError == TypeOfEmailError.wrongEmail) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please enter valid credentials',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else if (typeOfError == TypeOfEmailError.inValidEmail) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please enter valid Email',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else if (typeOfError == TypeOfEmailError.emailFieldIsEmpty) {
+      return Column(
+        children: const [
+          SizedBox(height: 10),
+          Text(
+            'Please Fill Email Field',
+            style: TextStyle(
+              color: errorTextColor,
+            ),
+          )
+        ],
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }
