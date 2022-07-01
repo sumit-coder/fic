@@ -2,13 +2,46 @@ import 'package:flutter/material.dart';
 
 import '../../constants/ui_constants.dart';
 import '../../enums/enums.dart';
+import '../../utility/email_password_validation.dart';
 import '../animations/bear_animation_widget.dart';
 import '../widgets/form_widgets/email_input_field.dart';
 import '../widgets/form_widgets/form_submit_button.dart';
 import 'multi_use_screens/otp_verification_screen.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  ForgetPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  String typedEmail = '';
+
+  TypeOfEmailError emailError = TypeOfEmailError.none;
+  onTapContinue() {
+    // Email Validation
+    if (typedEmail != '') {
+      if (isEmailValid(typedEmail) == true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              userEmail: typedEmail,
+            ),
+          ),
+        );
+      } else {
+        setState(() {
+          emailError = TypeOfEmailError.inValidEmail;
+        });
+      }
+    } else {
+      setState(() {
+        emailError = TypeOfEmailError.emailFieldIsEmpty;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +90,16 @@ class ForgetPasswordScreen extends StatelessWidget {
                       // Email Field
 
                       EmailInputField(
+                        isDisable: false,
                         hintText: 'Email',
                         errorText: 'This is error Message',
                         titleText: 'Parent Email*',
                         isError: TypeOfEmailError.none,
-                        onValueChange: (typedValue) {},
+                        onValueChange: (typedValue) {
+                          setState(() {
+                            typedEmail = typedValue;
+                          });
+                        },
                       ),
 
                       const SizedBox(height: 24),
@@ -73,7 +111,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const OtpVerificationScreen()),
+                                builder: (context) => OtpVerificationScreen(
+                                  userEmail: typedEmail,
+                                ),
+                              ),
                             );
                           },
                           buttonTitle: 'Continue',

@@ -1,8 +1,23 @@
 /// Enum For getting Diffrent Type Of Email Error's
-enum TypeOfEmailError { wrongEmail, inValidEmail, emailFieldIsEmpty, none }
+enum TypeOfEmailError {
+  wrongEmail,
+  inValidEmail,
+  emailFieldIsEmpty,
+  none,
+}
 
 /// Enum For getting Diffrent Type Of Password Error's
-enum TypeOfPasswordError { wrongPassword, inValidPassword, passwordFieldIsEmpty, none }
+enum TypeOfPasswordError {
+  wrongPassword,
+  inValidPassword,
+  passwordFieldIsEmpty,
+  passwordDontMatch,
+  none
+}
 
 /// Enum is Used for getting diffrent type of OTP Error's
-enum TypeOfOtpError { emptyOtp, wrongOtp, none }
+enum TypeOfOtpError {
+  emptyOtp,
+  wrongOtp,
+  none,
+}

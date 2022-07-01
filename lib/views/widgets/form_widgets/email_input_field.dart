@@ -13,7 +13,7 @@ class EmailInputField extends StatefulWidget {
     required this.errorText,
     required this.onValueChange,
     required this.titleText,
-    this.isDisable,
+    required this.isDisable,
   }) : super(key: key);
 
   final String hintText;
@@ -21,16 +21,13 @@ class EmailInputField extends StatefulWidget {
   final TypeOfEmailError isError;
   final String errorText;
   final Function onValueChange;
-  final bool? isDisable;
+  final bool isDisable;
 
   @override
   State<EmailInputField> createState() => _EmailInputFieldState();
 }
 
 class _EmailInputFieldState extends State<EmailInputField> {
-  RegExp isValidateEmail =
-      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,8 +46,8 @@ class _EmailInputFieldState extends State<EmailInputField> {
           padding: const EdgeInsets.only(left: 10),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-            color: widget.isDisable == null ? Color.fromARGB(20, 0, 0, 0) : Colors.white,
-            borderRadius: BorderRadius.circular(4),
+            color: widget.isDisable == true ? Color.fromARGB(20, 0, 0, 0) : Colors.white,
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
               width: 1,
               color: widget.isError != TypeOfEmailError.none
@@ -60,8 +57,8 @@ class _EmailInputFieldState extends State<EmailInputField> {
           ),
           child: TextFormField(
             showCursor: true,
-            enabled: widget.isDisable,
-            initialValue: '',
+            enabled: widget.isDisable == true ? false : true,
+            // initialValue: '',
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
@@ -70,9 +67,9 @@ class _EmailInputFieldState extends State<EmailInputField> {
                       Icons.error_outline_rounded,
                       color: errorTextColor,
                     )
-                  : const Icon(
+                  : Icon(
                       Icons.email,
-                      color: Colors.white,
+                      color: widget.isDisable == true ? Colors.transparent : Colors.white,
                     ),
               isCollapsed: true,
               border: InputBorder.none,
@@ -83,7 +80,7 @@ class _EmailInputFieldState extends State<EmailInputField> {
               ),
             ),
             onChanged: (value) {
-              if (isValidateEmail.hasMatch(value)) {}
+              // if (isValidateEmail.hasMatch(value)) {}
               widget.onValueChange(value);
               // isEmailValid = false;
             },

@@ -8,7 +8,9 @@ import '../../widgets/form_widgets/form_submit_button.dart';
 import '../../widgets/form_widgets/password_input_field.dart';
 
 class PasswordSetUpScreen extends StatelessWidget {
-  const PasswordSetUpScreen({Key? key}) : super(key: key);
+  const PasswordSetUpScreen({Key? key, required this.userEmail}) : super(key: key);
+
+  final String userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,8 @@ class PasswordSetUpScreen extends StatelessWidget {
                       // Email Field
 
                       EmailInputField(
-                        hintText: 'parent@gmail.com',
+                        isDisable: true,
+                        hintText: userEmail,
                         errorText: 'This is error Message',
                         titleText: 'Parent Email',
                         isError: TypeOfEmailError.none,

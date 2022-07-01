@@ -28,21 +28,21 @@ class PasswordInputField extends StatefulWidget {
 
 class _PasswordInputFieldState extends State<PasswordInputField> {
   bool isObscureText = true;
-
-  RegExp minCharactersRegEx = RegExp(r'^.{8,}');
-  RegExp uppercaseCharactersRegEx = RegExp(r'^(?=.*?[A-Z])');
-  RegExp lowercaseCharactersRegEx = RegExp(r'^(?=.*?[a-z])');
-  RegExp numberCharactersRegEx = RegExp(r'^(?=.*?[0-9])');
-
-  // RegExp validatePassword =
-  //     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$'); // for special (?=.*?[!@#\$&*~])
-
   bool isPasswordHasAError = false;
+
+  // REGx For realTime Password check
+  final RegExp minCharactersRegEx = RegExp(r'^.{8,}');
+  final RegExp uppercaseCharactersRegEx = RegExp(r'^(?=.*?[A-Z])');
+  final RegExp lowercaseCharactersRegEx = RegExp(r'^(?=.*?[a-z])');
+  final RegExp numberCharactersRegEx = RegExp(r'^(?=.*?[0-9])');
+  //
+
   bool isPasswordHasMinCharacters = false;
   bool isPasswordHasUppercaseCharacters = false;
   bool isPasswordHasLowercaseCharacters = false;
   bool isPasswordHasNumberCharacters = false;
 
+  // With This Function we can Check Passwrod valid or not in Realtime
   checkPasswordIsValid(String value) {
     setState(() {
       // A minimum of 8 characters
@@ -76,22 +76,6 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           isPasswordHasUppercaseCharacters &&
           isPasswordHasMinCharacters) {
         isPasswordHasAError = false;
-      }
-    });
-  }
-
-  setAllInstructionToThis({required bool valueForAllInstruction}) {
-    setState(() {
-      if (valueForAllInstruction == true) {
-        isPasswordHasMinCharacters = true;
-        isPasswordHasUppercaseCharacters = true;
-        isPasswordHasLowercaseCharacters = true;
-        isPasswordHasNumberCharacters = true;
-      } else {
-        isPasswordHasMinCharacters = false;
-        isPasswordHasUppercaseCharacters = false;
-        isPasswordHasLowercaseCharacters = false;
-        isPasswordHasNumberCharacters = false;
       }
     });
   }
@@ -154,7 +138,10 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             onChanged: (value) {
               widget.onValueChange(value);
 
-              checkPasswordIsValid(value);
+              // only check RealtTime Password when Password Instructions are on screen
+              if (widget.needPasswordInstruction == true) {
+                checkPasswordIsValid(value);
+              }
             },
           ),
         ),
@@ -177,30 +164,30 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
                         TextSpan(
                           text: '  *  A minimum of 8 characters\n',
                           style: TextStyle(
-                            color: isPasswordHasMinCharacters ? nonActiveTextColor : errorTextColor,
+                            color: isPasswordHasMinCharacters ? Colors.green : nonActiveTextColor,
                           ),
                         ),
                         TextSpan(
                           text: '  *  One uppercase (A-Z)\n',
                           style: TextStyle(
                             color: isPasswordHasUppercaseCharacters
-                                ? nonActiveTextColor
-                                : errorTextColor,
+                                ? Colors.green
+                                : nonActiveTextColor,
                           ),
                         ),
                         TextSpan(
                           text: '  *  One lowercase letters (a-z)\n',
                           style: TextStyle(
                             color: isPasswordHasLowercaseCharacters
-                                ? nonActiveTextColor
-                                : errorTextColor,
+                                ? Colors.green
+                                : nonActiveTextColor,
                           ),
                         ),
                         TextSpan(
                           text: '  *  One number (0-9)',
                           style: TextStyle(
                             color:
-                                isPasswordHasNumberCharacters ? nonActiveTextColor : errorTextColor,
+                                isPasswordHasNumberCharacters ? Colors.green : nonActiveTextColor,
                           ),
                         ),
                       ],

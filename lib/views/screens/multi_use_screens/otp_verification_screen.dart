@@ -7,7 +7,9 @@ import '../../widgets/form_widgets/otp_text_field.dart';
 import 'setup_password_screen.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({Key? key}) : super(key: key);
+  const OtpVerificationScreen({Key? key, required this.userEmail}) : super(key: key);
+
+  final String userEmail;
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -35,19 +37,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     width: 296,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'OTP Verification',
                           style: TextStyle(
                             fontSize: 36,
                             color: Color(0xFF21005D),
                           ),
                         ),
-                        Text(
-                          'We have sent you a one time password on your registered email.',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: nonActiveTextColor,
+                        RichText(
+                          text: TextSpan(
+                            text: 'We have sent you a one time password on ',
+                            // style: DefaultTextStyle.of(context).style,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: nonActiveTextColor,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: widget.userEmail,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: nonActiveTextColor,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -70,6 +84,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       // OTP text Fields
                       OtpTextFields(
                         otpError: otpError,
+                        // OtpTextFields gives you list of otp Value
                         onChange: (List<int> value) {
                           setState(() {
                             otpValue = int.parse('${value[0]}${value[1]}${value[2]}${value[3]}');
@@ -145,7 +160,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const PasswordSetUpScreen(),
+                                      builder: (context) => PasswordSetUpScreen(
+                                        userEmail: widget.userEmail,
+                                      ),
                                     ),
                                   );
                                 }

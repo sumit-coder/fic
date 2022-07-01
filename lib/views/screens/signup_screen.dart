@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/ui_constants.dart';
 import '../../enums/enums.dart';
+import '../../utility/email_password_validation.dart';
 import '../animations/bear_animation_widget.dart';
 import '../widgets/buttons/social_sign_in_buttons.dart';
 import '../widgets/form_widgets/email_input_field.dart';
@@ -23,7 +24,31 @@ class SignUpScreenScreen extends StatefulWidget {
 class _SignUpScreenScreenState extends State<SignUpScreenScreen> {
   String typedEmail = '';
 
-  bool isEmailError = false;
+  TypeOfEmailError emailError = TypeOfEmailError.none;
+
+  onTapContinue() {
+    // Email Validation
+    if (typedEmail != '') {
+      if (isEmailValid(typedEmail) == true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              userEmail: typedEmail,
+            ),
+          ),
+        );
+      } else {
+        setState(() {
+          emailError = TypeOfEmailError.inValidEmail;
+        });
+      }
+    } else {
+      setState(() {
+        emailError = TypeOfEmailError.emailFieldIsEmpty;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +100,14 @@ class _SignUpScreenScreenState extends State<SignUpScreenScreen> {
                     children: [
                       // Email Field
                       EmailInputField(
-                        isDisable: true,
+                        isDisable: false,
                         hintText: 'parent@gmail.com',
                         errorText: 'This is error Message',
                         titleText: 'Parent Email*',
-                        isError: TypeOfEmailError.none,
+                        isError: emailError,
                         onValueChange: (typedValue) {
                           setState(() {
-                            isEmailError = false;
+                            emailError = TypeOfEmailError.none;
                             typedEmail = typedValue;
                           });
                         },
@@ -94,12 +119,7 @@ class _SignUpScreenScreenState extends State<SignUpScreenScreen> {
                         alignment: Alignment.topCenter,
                         child: FormSubmitButton(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const OtpVerificationScreen(),
-                              ),
-                            );
+                            onTapContinue();
                           },
                           buttonTitle: 'Continue',
                         ),

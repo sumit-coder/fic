@@ -9,7 +9,6 @@ import '../widgets/form_widgets/form_submit_button.dart';
 import '../widgets/form_widgets/password_input_field.dart';
 import 'fake_dashboard_screen.dart';
 import 'forget_password_screen.dart';
-import 'multi_use_screens/setup_password_screen.dart';
 import 'signup_screen.dart';
 
 class SignInScreenScreen extends StatefulWidget {
@@ -134,13 +133,14 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                     children: [
                       // Email Field
                       EmailInputField(
-                        isDisable: true,
+                        isDisable: false,
                         hintText: 'Email',
                         errorText: 'This is error Message',
                         titleText: 'Email',
                         isError: emailError,
                         onValueChange: (typedValue) {
                           setState(() {
+                            emailError = TypeOfEmailError.none;
                             typedEmail = typedValue;
                           });
                         },
@@ -157,6 +157,7 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                         needPasswordInstruction: false,
                         onValueChange: (typedValue) {
                           setState(() {
+                            passwordError = TypeOfPasswordError.none;
                             typedPassword = typedValue;
                           });
                         },
@@ -202,8 +203,7 @@ class _SignInScreenScreenState extends State<SignInScreenScreen> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ForgetPasswordScreen()),
+                                MaterialPageRoute(builder: (context) => ForgetPasswordScreen()),
                               );
                             },
                             child: const Text(
